@@ -1,0 +1,3 @@
+decouverte_nom;decouvreurs
+l'effet photoélectrique;Albert Einstein
+radium;Marie Curie
