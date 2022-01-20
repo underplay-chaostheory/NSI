@@ -1,3 +1,0 @@
-denomination;year;domaines
-l'effet photoélectrique;1921;Physique 
-radium;1898;Chimie
