@@ -1,17 +1,17 @@
 import csv
 
 """
-possibilité de relancer le programme
 possibilité d'ajouter de modifier ou de supprimmer des éléments
-completer les fichier
+completer les fichiers, si envie
 """
 
 def menu():
-    print("Vous pouvez effectuer des modifications sur la listes des scientifiques ou des découvertes, ou bien les consulter.\n")
+    print("\nVous pouvez effectuer des modifications sur la listes des scientifiques ou des découvertes, ou bien les consulter.\n")
     action = input("Modification -1-\nConsultation -2-\n").lower()
     if action == "modification" or action == "1":
         modification()
     elif action == "consultation" or action == "2":
+        # TERMINER ET FONCTIONNE CORRECTEMENT
         consultation()
     else:
         print("Veuillez écrire votre action ou son numéro")
@@ -25,14 +25,14 @@ def consultation():
         if nom_fichier == "scientifiques" or nom_fichier == "1":
             requete = input("\nInformation sur un scientifique -1-\nNom de tous les scientifiques -2-\nTous les scientifiques qui ont eu un prix Nobel -3-\nTous ceux qui ont vécu au XXème siècle -4-\nToutes les découvertes d'un scientifique -5-\n")
         elif nom_fichier == "decouvertes" or nom_fichier == "2":
-            requete = input("\nInformation sur une découverte -1-\nNom de toutes les découvertes - 2-\nToutes les découvertes du XXème siècle - 3-\nNombre moyen de domaines d'application d'une découverte -4-\nTous les scientifiques qui ont participé à une découverte -5-\n")
+            requete = input("\nInformation sur une découverte -1-\nNom de toutes les découvertes -2-\nToutes les découvertes du XXème siècle -3-\nNombre moyen de domaines d'application d'une découverte -4-\nTous les scientifiques qui ont participé à une découverte -5-\n")
         elif nom_fichier[:8] == "les deux" or nom_fichier == "3":
             requete = input("\nAnnées de découverte de toutes les découvertes d'un scientifique -1-\nLes prix de tous les scientifiques ayant participé à une découverte -2-\n")
         else: 
             print("Demande invalide, vérifier que vous n'avez pas écris d'accent ou écrivez le numéro.\n")
-# réponse aux questions
+# réponseS aux questions
     if nom_fichier == "scientifiques" or nom_fichier == "1":
-        with open(r"U:\damien.decarre\scientifiques.csv", newline="", encoding="utf-8") as scientifiques:
+        with open("scientifiques.csv", newline="", encoding="utf-8") as scientifiques:
             reader = csv.DictReader(scientifiques, delimiter=";")
             if requete == "1":
                 nom = input("Nom (format nom prénom) : ")
@@ -47,11 +47,11 @@ def consultation():
                 nom = input("Nom (format nom prénom) : ")
                 scientifique_ses_decouverte(nom)
     if nom_fichier == "decouvertes" or nom_fichier == "2":
-        with open(r"U:\damien.decarre\decouvertes.csv", newline="", encoding="utf-8") as decouvertes:
+        with open("decouvertes.csv", newline="", encoding="utf-8") as decouvertes:
             reader = csv.DictReader(decouvertes, delimiter=";")
             if requete == "1":
-                decouverte = input("Nom : ")
-                info_decouverte(reader, decouverte) #bug
+                decouverte = input("Dénomination de la découverte : ")
+                info_decouverte(reader, decouverte)
             if requete == "2":
                 nom_decouvertes(reader)
             if requete == "3":
@@ -66,7 +66,7 @@ def consultation():
             nom = input("Nom (format nom prénom) : ")
             annee_decouvertes_scientifique(nom)
         if requete == "2":
-            decouverte = input("Nom : ")
+            decouverte = input("Dénomination de la découverte : ")
             prix_scientifiques_decouverte(decouverte)
             
 ###########################################################################################################################################################################################
@@ -89,11 +89,11 @@ def nobel(reader):
 def XX_siecle_scientifique(reader):
     # donne la liste de tous les scientifiques ayant vécu au XXème siècle
     for row in reader:
-        if int(row["year_birth"]) > 1900 or int(row["year_death"]) < 2000:
+        if 2000 > int(row["year_birth"]) > 1900 or 1900 < int(row["year_death"]) < 2000:
             print(row["nom"])
 def scientifique_ses_decouverte(nom):
     # donne la liste des découvertes auxquelles un scientifiques a participé
-    with open(r"U:\damien.decarre\decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
+    with open("decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
         reader = csv.DictReader(decouvreurs, delimiter=";")
         for row in reader:
             if row["decouvreurs"] == nom:
@@ -102,7 +102,7 @@ def scientifique_ses_decouverte(nom):
 ###########################################################################################################################################################################################
 
 # questions sur les découvertes
-def info_decouverte(reader,decouverte):#bug
+def info_decouverte(reader,decouverte):
     # donne les informations disponibles sur une découverte : Dénomination, année de découverte, domaines d'application
     for row in reader:
         if row["denomination"] == decouverte:
@@ -121,13 +121,13 @@ def nb_moy_domaines(reader):
     somme = 0
     nb_decouverte = 0
     for row in reader:
-        domaines = row["domaines"].split(" ")
+        domaines = row["domaines"].split(", ")
         somme += len(domaines)
         nb_decouverte += 1
     print(somme/nb_decouverte)
 def decouverte_ses_scientifiques(decouverte):
     # donne tous les scientifiques ayant participé à la découverte d'une découverte
-     with open(r"U:\damien.decarre\decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
+     with open("decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
         reader = csv.DictReader(decouvreurs, delimiter=";")
         for row in reader:
             if row["nom_decouverte"] == decouverte:
@@ -138,29 +138,29 @@ def decouverte_ses_scientifiques(decouverte):
 # questions sur les deux fichiers
 def annee_decouvertes_scientifique(nom):
     # donne l'année de découverte de toutes les découvertes d'un scientifique
-    decouvertes_du_scientique = []
-    with open(r"U:\damien.decarre\decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
+    decouvertes_du_scientifique = []
+    with open("decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
         reader = csv.DictReader(decouvreurs, delimiter=";")
         for row in reader:
             if row["decouvreurs"] == nom:
                 decouvertes_du_scientifique.append(row["nom_decouverte"])
-    with open(r"U:\damien.decarre\decouvertes.csv", newline="", encoding="utf-8") as decouvertes:
+    with open("decouvertes.csv", newline="", encoding="utf-8") as decouvertes:
         reader = csv.DictReader(decouvertes, delimiter=";")
         for row in reader:
             if decouvertes_du_scientifique.count(row["denomination"]) == 1:
                 print(row["year"])
 def prix_scientifiques_decouverte(decouverte):
     # donne tous les prix reçu par tous les scientifiques ayant participés à une découverte
-    decouvreurs = []
-    with open(r"U:\damien.decarre\decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
+    decouvreurs_de_la_decouverte = []
+    with open("decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
         reader = csv.DictReader(decouvreurs, delimiter=";")
         for row in reader:
             if row["nom_decouverte"] == decouverte:
-                decouvreurs.append(row["decouvreurs"])
-    with open(r"U:\damien.decarre\scientifiques.csv", newline="", encoding="utf-8") as scientifiques:
+                decouvreurs_de_la_decouverte.append(row["decouvreurs"])
+    with open("scientifiques.csv", newline="", encoding="utf-8") as scientifiques:
         reader = csv.DictReader(scientifiques, delimiter=";")
         for row in reader:
-            if decouvreurs.count(row["nom"]) == 1:
+            if decouvreurs_de_la_decouverte.count(row["nom"]) == 1:
                 print(row["nom"] + " a reçu les prix suivants : " + row["prix"])
                 
 ############################################################################################################################################################################################
@@ -174,6 +174,7 @@ def modification():
 ############################################################################################################################################################################################
 ############################################################################################################################################################################################
 
+#boucle pour que le programme se relance dès qu'il est terminé
 print("Ce programme vous permet de manipuler deux fichiers contenant des informations sur des scientifiques, tel que leur nom, leur année de naissance, leur année de décès et leur prix scientifiques. Le deuxième contient des lois et leurs informations comme leur nom, leur année de découverte et leurs domaines.\n")
 i = 0
 while i < 1:
