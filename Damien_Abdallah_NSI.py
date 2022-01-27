@@ -1,7 +1,7 @@
 import csv
 
 """
-possibilité d'ajouter de modifier ou de supprimmer des éléments
+possibilité d'ajouter de modifier
 completer les fichiers, si envie
 """
 
@@ -13,7 +13,7 @@ def menu():
     elif action == "2":
         consultation()
     elif action == "3":
-	reset()
+        reset()
     else:
         print("Veuillez écrire votre par son numéro")
 
@@ -144,12 +144,7 @@ def decouverte_ses_scientifiques(decouverte):
 # questions sur les deux fichiers
 def annee_decouvertes_scientifique(nom):
     # donne l'année de découverte de toutes les découvertes d'un scientifique
-    decouvertes_du_scientifique = []
-    with open("decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
-        reader = csv.DictReader(decouvreurs, delimiter=";")
-        for row in reader:
-            if row["decouvreurs"] == nom:
-                decouvertes_du_scientifique.append(row["nom_decouverte"])
+    decouvertes_du_scientifique = sauvegarder_association("decouvreurs", "nom_decouverte",nom)
     with open("decouvertes.csv", newline="", encoding="utf-8") as decouvertes:
         reader = csv.DictReader(decouvertes, delimiter=";")
         for row in reader:
@@ -157,18 +152,13 @@ def annee_decouvertes_scientifique(nom):
                 print(row["year"])
 def prix_scientifiques_decouverte(decouverte):
     # donne tous les prix reçu par tous les scientifiques ayant participés à une découverte
-    decouvreurs_de_la_decouverte = []
-    with open("decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
-        reader = csv.DictReader(decouvreurs, delimiter=";")
-        for row in reader:
-            if row["nom_decouverte"] == decouverte:
-                decouvreurs_de_la_decouverte.append(row["decouvreurs"])
+    decouvreurs_de_la_decouverte = sauvegarder_association("nom_decouverte", "decouvreurs",decouverte)
     with open("scientifiques.csv", newline="", encoding="utf-8") as scientifiques:
         reader = csv.DictReader(scientifiques, delimiter=";")
         for row in reader:
             if decouvreurs_de_la_decouverte.count(row["nom"]) == 1:
-                print(row["nom"] + " a reçu les prix suivants : " + row["prix"])
-                
+                print(row["nom"] + " a reçu les prix suivants : " + row["prix"])          
+
 ############################################################################################################################################################################################
 ############################################################################################################################################################################################
 
@@ -196,6 +186,15 @@ def reset():
     reecriture(decouvreurs,"decouvreurs.csv")
 
 ############################################################################################################################################################################################
+
+def sauvegarder_association(clé, valeur, condition):
+    stockage = []
+    with open("decouvreurs.csv", newline="", encoding="utf-8") as decouvreurs:
+        reader = csv.DictReader(decouvreurs, delimiter=";")
+        for row in reader:
+            if row[clé] == condition:
+                stockage.append(row[valeur])
+    return stockage
 
 def ajout(nouvelle_ligne,fichier):
     # ajoute nouvelle_ligne au fichier
