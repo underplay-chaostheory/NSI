@@ -7,31 +7,31 @@ completer les fichiers, si envie
 
 def menu():
     print("\nVous pouvez effectuer des modifications sur la listes des scientifiques ou des découvertes, ou bien les consulter.\n")
-    action = input("Modification -1-\nConsultation -2-\n").lower()
-    if action == "modification" or action == "1":
+    action = input("Modification -1-\nConsultation -2-\nReset les fichiers -3-\n").lower()
+    if action == "1":
         modification()
-    elif action == "consultation" or action == "2":
-        # TERMINER ET FONCTIONNE CORRECTEMENT
+    elif action == "2":
         consultation()
+	elif action == "3":
+		reset()
     else:
-        print("Veuillez écrire votre action ou son numéro")
-
+        print("Veuillez écrire votre par son numéro")
 
 def consultation():  
 # questions que l'utilisateur peut poser
     requete = ""
     while requete == "":
         nom_fichier = input("\nSur quel fichier voulez-vous travailler \nScientifiques -1-\nDecouvertes -2-\nLes deux fichiers -3-\n").lower()
-        if nom_fichier == "scientifiques" or nom_fichier == "1":
+        if nom_fichier == "1":
             requete = input("\nInformation sur un scientifique -1-\nNom de tous les scientifiques -2-\nTous les scientifiques qui ont eu un prix Nobel -3-\nTous ceux qui ont vécu au XXème siècle -4-\nToutes les découvertes d'un scientifique -5-\n")
-        elif nom_fichier == "decouvertes" or nom_fichier == "2":
+        elif nom_fichier == "2":
             requete = input("\nInformation sur une découverte -1-\nNom de toutes les découvertes -2-\nToutes les découvertes du XXème siècle -3-\nNombre moyen de domaines d'application d'une découverte -4-\nTous les scientifiques qui ont participé à une découverte -5-\n")
-        elif nom_fichier[:8] == "les deux" or nom_fichier == "3":
+        elif nom_fichier == "3":
             requete = input("\nAnnées de découverte de toutes les découvertes d'un scientifique -1-\nLes prix de tous les scientifiques ayant participé à une découverte -2-\n")
         else: 
-            print("Demande invalide, vérifier que vous n'avez pas écris d'accent ou écrivez le numéro.\n")
+            print("Demande invalide, appelez l'action par son numéro.\n")
 # réponseS aux questions
-    if nom_fichier == "scientifiques" or nom_fichier == "1":
+    if nom_fichier == "1":
         with open("scientifiques.csv", newline="", encoding="utf-8") as scientifiques:
             reader = csv.DictReader(scientifiques, delimiter=";")
             if requete == "1":
@@ -46,7 +46,7 @@ def consultation():
             elif requete == "5":
                 nom = input("Nom (format nom prénom) : ")
                 scientifique_ses_decouverte(nom)
-    if nom_fichier == "decouvertes" or nom_fichier == "2":
+    if nom_fichier == "2":
         with open("decouvertes.csv", newline="", encoding="utf-8") as decouvertes:
             reader = csv.DictReader(decouvertes, delimiter=";")
             if requete == "1":
@@ -61,7 +61,7 @@ def consultation():
             if requete == "5":
                 decouverte = input("Dénomination de la découverte : ").lower()
                 decouverte_ses_scientifiques(decouverte)
-    if nom_fichier[:8] == "les deux" or nom_fichier == "3":
+    if nom_fichier == "3":
         if requete == "1":
             nom = input("Nom (format nom prénom) : ")
             annee_decouvertes_scientifique(nom)
@@ -170,6 +170,33 @@ def prix_scientifiques_decouverte(decouverte):
 def modification():
     print("")
 
+def reset():
+	scientifiques =[['nom', 'year_birth', 'year_death', 'prix'],['Ernest Rutherford', '1871', '1937', 'Nobel de Chimie, Médaille Copley'],['Joseph John Thomson', '1856', '1940', 'Nobel de Physique'],
+	['James Chadwick', '1891', '1932', 'Nobel de Physique'],['Niels Bohr', '1885', '1962', 'Nobel de Physique, Médaille Copley'],['Albert Einstein', '1879', '1955', 'Nobel de Physique'],
+	['Marie Curie', '1867', '1934', 'Nobels de Physique et de Chimie'],['John Dalton', '1766', '1844', 'Aucun'],['Henri Becquerel', '1852', '1908', 'Nobel de Physique']]
+	with open(r"U:\damien.decarre\scientifiques.csv",'w', newline='', encoding="utf-8") as file:
+    # réécrit le fichier scientifiques
+        writer = csv.writer(file, delimiter=";")
+        for row in scientifiques:
+            writer.writerow(row)
+	decouvertes =[['denomination', 'year', 'domaines'],['Les rayonnements radioactifs', '1899', 'Physique nucléiare, Modèle standard'],['La désintégration radioactive', '1902', 'Physique nucléaire, Modèle standard'],
+	["L'effet photoélectrique", '1921', 'Physique, Physique nucléaire'],['Le radium', '1898', 'Chimie, Physique nucléaire, Physique'],['Le modèle atomique', '1960', 'Physique nucléaire, Modèle standard'],
+	['Le neutron', '1932', 'Physique nucléaire, Modèle standard'],["L'électron", '1897', 'Physique nucléaire, chimie, Modèle standard'],
+	['Le principe de complémentarité', '1927', 'Physique quantique, Modèle standard'], ["L'énergie de masse", '1905', 'Physique nucléaire, Mécanique céleste, Modèle standard']]
+	with open(r"U:\damien.decarre\decouvertes.csv",'w', newline='', encoding="utf-8") as file:
+    # réécrit le fichier decouvertes
+        writer = csv.writer(file, delimiter=";")
+        for row in decouvertes:
+            writer.writerow(row)
+	decouvreurs =[['nom_decouverte', 'decouvreurs'],['Les rayonnements radioactifs', 'Ernest Rutherford'],['La désintégration radioactive', 'Ernest Rutherford'],['Le modèle atomique', 'Ernest Rutherford'],
+	['Le modèle atomique', 'John Dalton'],['Le modèle atomique', 'Joseph John Thomson'],["L'électron", 'Joseph John Thomson'],['Le modèle atomique', 'James Chadwick'],
+	['Le neutron', 'James Chadwick'],['Le modèle atomique', 'Niels Bohr'],['Le principe de complémentarité', 'Niels Bohr'],["L'énergie de masse", 'Albert Einstein'],["L'effet photoélectrique", 'Albert Einstein'],
+	['Le radium', 'Marie Curie'],['Les rayonnements radioactifs', 'Marie Curie'],['La désintégration radioactive', 'Marie Curie'],['La désintégration radioactive', 'Henri Becquerel']]
+	with open(r"U:\damien.decarre\decouvreurs.csv",'w', newline='', encoding="utf-8") as file:
+    # réécrit le fichier decouvreurs
+        writer = csv.writer(file, delimiter=";")
+        for row in decouvreurs:
+            writer.writerow(row)
 
 ############################################################################################################################################################################################
 ############################################################################################################################################################################################
