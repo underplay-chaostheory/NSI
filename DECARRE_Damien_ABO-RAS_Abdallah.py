@@ -11,7 +11,7 @@ Vous pouvez également réinitialiser les fichiers.
 
 def menu():
     print("\nVous pouvez effectuer des modifications sur la listes des scientifiques ou des découvertes, ou bien les consulter.\n")
-    action = input("Modification -1-\nConsultation -2-\nReset les fichiers -3-\n")
+    action = input("Modification -1-\nConsultation -2-\nRéinitialiser les fichiers -3-\n")
     if action == "1":
         modification()
     elif action == "2":
@@ -21,7 +21,7 @@ def menu():
     else:
         print("Veuillez écrire votre par son numéro")
 
-def consultation():  
+def consultation():
 # questions que l'utilisateur peut poser
     requete = ""
     while requete == "":
@@ -50,7 +50,7 @@ def consultation():
             elif requete == "5":
                 nom = input("Prénom Nom : ")
                 scientifique_ses_decouverte(nom)
-    if nom_fichier == "2":
+    elif nom_fichier == "2":
         with open("decouvertes.csv", newline="", encoding="utf-8") as decouvertes:
             reader = csv.DictReader(decouvertes, delimiter=";")
             if requete == "1":
@@ -65,13 +65,15 @@ def consultation():
             if requete == "5":
                 decouverte = input("Dénomination de la découverte : ")
                 decouverte_ses_scientifiques(decouverte)
-    if nom_fichier == "3":
+    elif nom_fichier == "3":
         if requete == "1":
             nom = input("Prénom Nom : ")
             annee_decouvertes_scientifique(nom)
         if requete == "2":
             decouverte = input("Dénomination de la découverte : ")
             prix_scientifiques_decouverte(decouverte)
+    else:
+        print("Demande invalide, appelez les actions par leur numéro.\n")
             
 ###########################################################################################################################################################################################
 
@@ -162,7 +164,6 @@ def prix_scientifiques_decouverte(decouverte):
 
 # modification des fichiers
 def modification():
-    # Si modif du nom, le modifier dans les autres fichiers 
     print("\nVoulez-vous :\n")
     action = input("Ajouter un scientifique -1-\nSupprimer un scientifique -2-\nModifier les informations d'un scientifique -3-\nAjouter une découverte -4-\nSupprimer une découverte -5-\nModifier les informations sur une découverte -6-\nAjouter une associatioin découverte:scientifique -7-\nSupprimer une associatioin découverte:scientifique -8-\n")
     if action =="1":
@@ -215,7 +216,7 @@ def scientifique_suppression(nom):
                     writer.writerow(row)
     decouvreurs = sauvegarder("decouvreurs.csv")
     with open("decouvreurs.csv",'w', newline='', encoding="utf-8") as file:
-    # réécrit le fichier decouvreurs sans les valeur qui contient le scientifique ayant été retiré
+    # réécrit le fichier decouvreurs sans les valeurs qui contiennent le scientifique ayant été retiré
         writer = csv.writer(file, delimiter=";")
         for row in decouvreurs:
             if row != []:
@@ -255,7 +256,7 @@ def decouverte_suppression(denomination):
                     writer.writerow(row)
     decouvreurs = sauvegarder("decouvreurs.csv")
     with open("decouvreurs.csv",'w', newline='', encoding="utf-8") as file:
-    # réécrit le fichier decouvreurs sans les valeur qui contient le scientifique ayant été retiré
+    # réécrit le fichier decouvreurs sans les valeurs qui contiennent le scientifique ayant été retiré
         writer = csv.writer(file, delimiter=";")
         for row in decouvreurs:
             if row != []:
@@ -297,6 +298,7 @@ def decouvreur_ajout(relation):
         ajout(nouvelle_ligne,"decouvreurs.csv")
     afficher("decouvreurs.csv")
 def decouvreur_suppression(relation):
+# supprime une association
     relation = relation.split(", ")
     decouvreurs = sauvegarder("decouvreurs.csv")
     with open("decouvreurs.csv",'w', newline='', encoding="utf-8") as file:
@@ -323,10 +325,12 @@ def reset():
     ['Le modèle atomique', 'John Dalton'],['Le modèle atomique', 'Joseph John Thomson'],["L'électron", 'Joseph John Thomson'],['Le modèle atomique', 'James Chadwick'],
     ['Le neutron', 'James Chadwick'],['Le modèle atomique', 'Niels Bohr'],['Le principe de complémentarité', 'Niels Bohr'],["L'énergie de masse", 'Albert Einstein'],["L'effet photoélectrique", 'Albert Einstein'],
     ['Le radium', 'Marie Curie'],['Les rayonnements radioactifs', 'Marie Curie'],['La désintégration radioactive', 'Marie Curie'],['La désintégration radioactive', 'Henri Becquerel']]
-
+    
     reecriture(scientifiques,"scientifiques.csv")
     reecriture(decouvertes,"decouvertes.csv")
     reecriture(decouvreurs,"decouvreurs.csv")
+            
+        
 
 ############################################################################################################################################################################################
 
@@ -376,11 +380,34 @@ def reecriture(sauvegarde,fichier):
 ############################################################################################################################################################################################
 
 #boucle pour que le programme se relance dès qu'il est terminé
+scientifiques =[['nom', 'year_birth', 'year_death', 'prix'],['Ernest Rutherford', '1871', '1937', 'Nobel de Chimie, Médaille Copley'],['Joseph John Thomson', '1856', '1940', 'Nobel de Physique'],
+['James Chadwick', '1891', '1932', 'Nobel de Physique'],['Niels Bohr', '1885', '1962', 'Nobel de Physique, Médaille Copley'],['Albert Einstein', '1879', '1955', 'Nobel de Physique'],
+['Marie Curie', '1867', '1934', 'Nobels de Physique et de Chimie'],['John Dalton', '1766', '1844', 'Aucun'],['Henri Becquerel', '1852', '1908', 'Nobel de Physique']]
+
+decouvertes =[['denomination', 'year', 'domaines'],['Les rayonnements radioactifs', '1899', 'Physique nucléiare, Modèle standard'],['La désintégration radioactive', '1902', 'Physique nucléaire, Modèle standard'],
+["L'effet photoélectrique", '1921', 'Physique, Physique nucléaire'],['Le radium', '1898', 'Chimie, Physique nucléaire, Physique'],['Le modèle atomique', '1960', 'Physique nucléaire, Modèle standard'],
+['Le neutron', '1932', 'Physique nucléaire, Modèle standard'],["L'électron", '1897', 'Physique nucléaire, chimie, Modèle standard'],
+['Le principe de complémentarité', '1927', 'Physique quantique, Modèle standard'], ["L'énergie de masse", '1905', 'Physique nucléaire, Mécanique céleste, Modèle standard']]
+
+decouvreurs =[['nom_decouverte', 'decouvreurs'],['Les rayonnements radioactifs', 'Ernest Rutherford'],['La désintégration radioactive', 'Ernest Rutherford'],['Le modèle atomique', 'Ernest Rutherford'],
+['Le modèle atomique', 'John Dalton'],['Le modèle atomique', 'Joseph John Thomson'],["L'électron", 'Joseph John Thomson'],['Le modèle atomique', 'James Chadwick'],
+['Le neutron', 'James Chadwick'],['Le modèle atomique', 'Niels Bohr'],['Le principe de complémentarité', 'Niels Bohr'],["L'énergie de masse", 'Albert Einstein'],["L'effet photoélectrique", 'Albert Einstein'],
+['Le radium', 'Marie Curie'],['Les rayonnements radioactifs', 'Marie Curie'],['La désintégration radioactive', 'Marie Curie'],['La désintégration radioactive', 'Henri Becquerel']]
+    
 print("Ce programme vous permet de manipuler deux fichiers contenant des informations sur des scientifiques, tel que leur nom, leur année de naissance, leur année de décès et leur prix scientifiques. Le deuxième contient des lois et leurs informations comme leur nom, leur année de découverte et leurs domaines.\n")
-print("Les fichiers peuvent être crées si vous ne les possédez pas")
+print("Les fichiers peuvent être crées si vous ne les possédez pas.")
 i = 0
-action = input("Voulez-vous réinitialiser les fichiers ou les créer : Y/N\n").lower()
-if action == "y" or action == "yes":
-    reset()
+try:
+    file = open("scientifiques.csv", newline='', encoding="utf-8")
+except:
+    reecriture(scientifiques,"scientifiques.csv")
+try:
+    file = open("decouvertes.csv", newline='', encoding="utf-8")
+except:
+    reecriture(decouvertes,"decouvertes.csv")
+try:
+    file = open("decouvreurs.csv", newline='', encoding="utf-8")
+except:
+    reecriture(decouvreurs,"decouvreurs.csv")
 while i < 1:
     menu()
